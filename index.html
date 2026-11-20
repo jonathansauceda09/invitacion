@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduación de Jonathan - Contaduría y Finanzas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #2c0b14;
+            color: #f3e5f5;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        /* --- PANTALLA DEL SOBRE --- */
+        #envelope-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background: radial-gradient(circle, #3d0f1c 0%, #1a050b 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            z-index: 1000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .envelope-intro {
+            font-family: 'Cinzel', serif;
+            color: #f8bbd0;
+            font-size: 1.25rem;
+            line-height: 1.5;
+            max-width: 340px;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+        .envelope {
+            background: linear-gradient(145deg, #e5c158, #c5a028);
+            width: 290px;
+            height: 185px;
+            position: relative;
+            cursor: pointer;
+            border-radius: 6px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .envelope:active { transform: scale(0.96); }
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            border-left: 145px solid transparent;
+            border-right: 145px solid transparent;
+            border-top: 105px solid #b08d1e;
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.2));
+        }
+        .seal {
+            position: relative;
+            z-index: 3;
+            width: 52px;
+            height: 52px;
+            background: #5c1629;
+            border: 2px solid #f3e5f5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #d4af37;
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.6rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            margin-top: 10px;
+        }
+        .tap-hint {
+            margin-top: 22px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: #d4af37;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+            max-width: 460px;
+            margin: 0 auto;
+            padding: 35px 20px 50px;
+        }
+        .show-content {
+            display: block !important;
+            opacity: 1 !important;
+        }
+        .subtitle {
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            color: #d4af37;
+            text-transform: uppercase;
+        }
+        .cursive-title {
+            font-family: 'Great Vibes', cursive;
+            color: #f8bbd0;
+            font-size: 3.1rem;
+            line-height: 1.1;
+            margin: 8px 0 5px;
+        }
+        .grad-name {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        /* Foto Principal Actual (Sin recortar) */
+        .main-photo-frame {
+            width: 240px;
+            height: 290px;
+            margin: 0 auto 30px;
+            border-radius: 16px;
+            padding: 6px;
+            background: linear-gradient(180deg, #d4af37, #6e1c33);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #1a050b;
+            border-radius: 10px;
+            display: block;
+        }
+
+        /* Cuadrícula 4 Fotos de Pequeño - ESTILO POLAROID DORADO */
+        .section-label {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        .polaroid-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+        .polaroid {
+            /* Marco estilo polaroid con tono dorado elegante */
+            background: linear-gradient(145deg, #f7efd2, #d4af37);
+            padding: 10px 10px 30px 10px; /* Margen inferior más ancho típico de Polaroid */
+            border-radius: 4px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+        }
+        .polaroid:nth-child(1) { transform: rotate(-2deg); }
+        .polaroid:nth-child(2) { transform: rotate(2deg); }
+        .polaroid:nth-child(3) { transform: rotate(1.5deg); }
+        .polaroid:nth-child(4) { transform: rotate(-1.5deg); }
+        .polaroid img {
+            width: 100%;
+            height: 135px;
+            object-fit: contain;
+            background-color: #1a050b; /* Fondo oscuro para que la foto no recortada encaje bien */
+            display: block;
+        }
+
+        /* Tarjetas de Texto y Evento */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 14px;
+            padding: 22px 18px;
+            margin: 22px 0;
+        }
+        .quote-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-weight: 300;
+            font-style: italic;
+            color: #f3e5f5;
+        }
+        
+        /* Apartado de Advertencia de Sorpresa */
+        .card-warning {
+            background: rgba(110, 28, 51, 0.4);
+            border: 2px dashed #d4af37;
+            border-radius: 14px;
+            padding: 18px;
+            margin: 22px 0;
+        }
+        .warning-text {
+            font-family: 'Cinzel', serif;
+            color: #f8bbd0;
+            font-size: 0.95rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            line-height: 1.5;
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+        .event-detail {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        /* Cuenta Regresiva */
+        .countdown-box {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0 5px;
+            gap: 8px;
+        }
+        .time-unit {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid #d4af37;
+            border-radius: 10px;
+            padding: 10px 6px;
+            flex: 1;
+        }
+        .time-unit span {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #d4af37;
+        }
+        .time-unit small {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f8bbd0;
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.96); }
+        .btn-maps {
+            background: linear-gradient(135deg, #f3e5f5, #d4af37);
+            color: #2c0b14;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            padding: 10px 22px;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+        .btn-whatsapp {
+            background: #25d366;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            padding: 15px 25px;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. APARTADO DEL SOBRE -->
+    <div id="envelope-screen" onclick="openInvitation()">
+        <p class="envelope-intro">Queremos invitarte a celebrar con Jonathan su nuevo logro</p>
+        <div class="envelope">
+            <div class="seal">J</div>
+        </div>
+        <span class="tap-hint">Toca el sobre para abrir</span>
+    </div>
+
+    <!-- CONTENIDO DE LA INVITACIÓN -->
+    <div id="main-content">
+        <p class="subtitle">Bachiller en Contaduría y Finanzas</p>
+        <div class="cursive-title">Mi Graduación</div>
+        <div class="grad-name">Jonathan</div>
+
+        <!-- 2. FOTO ACTUAL DE JONATHAN (Sin recortar) -->
+        <div class="main-photo-frame">
+            <img src="foto-actual.jpeg" alt="Jonathan Graduación">
+        </div>
+
+        <!-- 3. CUATRO FOTOS DE PEQUEÑO (Polaroid con marco dorado y sin recortar) -->
+        <p class="section-label">Recuerdos de un gran camino</p>
+        <div class="polaroid-grid">
+            <div class="polaroid">
+                <img src="pequeno-1.jpeg" alt="Jonathan pequeño 1">
+            </div>
+            <div class="polaroid">
+                <img src="pequeno-2.jpeg" alt="Jonathan pequeño 2">
+            </div>
+            <div class="polaroid">
+                <img src="pequeno-3.jpeg" alt="Jonathan pequeño 3">
+            </div>
+            <div class="polaroid">
+                <img src="pequeno-4.jpeg" alt="Jonathan pequeño 4">
+            </div>
+        </div>
+
+        <!-- 4. TEXTO BONITO DESPUÉS DE LAS FOTOS -->
+        <div class="card">
+            <p class="quote-text">
+                "Cada paso, cada esfuerzo y cada sueño hoy se convierten en realidad. Este logro no es el final, sino el comienzo de una nueva etapa llena de metas por cumplir. Nos encantaria compartir este momento tan especial contigo."
+            </p>
+        </div>
+
+        <!-- APARTADO DE ADVERTENCIA DE SORPRESA -->
+        <div class="card-warning">
+            <p class="warning-text">
+                🤫 ¡SHHH! NO PUEDES DECIRLE NADA A JONATHAN, ES UNA SORPRESA PARA ÉL 🎁
+            </p>
+        </div>
+
+        <!-- 5. DÍA, LUGAR, MAPS Y CUENTA REGRESIVA -->
+        <div class="card">
+            <h2>Fecha y Hora</h2>
+            <p class="event-detail">Sábado, 28 de Noviembre de 2026<br>5:30 PM</p>
+
+            <!-- RELOJ CUENTA REGRESIVA -->
+            <div class="countdown-box">
+                <div class="time-unit"><span id="days">00</span><small>Días</small></div>
+                <div class="time-unit"><span id="hours">00</span><small>Horas</small></div>
+                <div class="time-unit"><span id="minutes">00</span><small>Min</small></div>
+                <div class="time-unit"><span id="seconds">00</span><small>Seg</small></div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(212,175,55,0.25); margin: 20px 0;">
+
+            <h2>Lugar</h2>
+            <p class="event-detail">Restaurante Fuego Grill<br>Av. Morazan, frente a uniplaza a la par de farmacia del ahorro</p>
+            
+            <a href="https://maps.app.goo.gl/GvE8tKV1sZfWbSTDA?g_st=iw" target="_blank" class="btn btn-maps">
+                📍 Ver en Google Maps
+            </a>
+        </div>
+
+        <!-- 6. BOTÓN CONFIRMAR ASISTENCIA -->
+        <div style="margin-top: 25px;">
+            <p style="font-family: 'Great Vibes', cursive; font-size: 2.2rem; color: #f8bbd0; margin-bottom: 10px;">
+                Confírmanos tu asistencia a mas tardar el domingo 22/11/26
+            </p>
+            <a href="https://wa.me/50494710840?text=¡Hola!%20Sí,%20asistiré%20a%20celebrar%20la%20graduación%20de%20Jonathan.%20🎓✨" target="_blank" class="btn btn-whatsapp">
+                Sí, asistiré
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Abrir sobre
+        function openInvitation() {
+            const envelope = document.getElementById('envelope-screen');
+            const main = document.getElementById('main-content');
+            envelope.style.opacity = '0';
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                main.classList.add('show-content');
+            }, 800);
+        }
+
+        // Cuenta regresiva
+        const eventDate = new Date("Nov 28, 2026 19:00:00").getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.querySelector(".countdown-box").innerHTML = "<p style='color:#d4af37; font-weight:bold;'>¡Hoy es el gran día!</p>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }, 1000);
+    </script>
+</body>
+</html>
